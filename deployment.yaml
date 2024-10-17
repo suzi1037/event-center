@@ -1,0 +1,137 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-exporter-cfg
+  namespace: ops
+data:
+  config.yaml: |
+    logLevel: info
+    logFormat: json
+    metricsNamePrefix: "event_exporter_"
+    maxEventAgeSeconds: 120
+    kubeQPS: 100
+    kubeBurst: 500
+    route:
+      routes:
+        - match:
+            - receiver: "clickhouse_events"
+    receivers:
+      - name: "clickhouse_events"
+        kafka:
+          clientId: "XXXXXXXXXXXXXXX"
+          topic: "XXXXXXXXXXXXXXX"
+          brokers:
+            - "XXXXXXXXXXXXXXX"
+            - "XXXXXXXXXXXXXXX"
+            - "XXXXXXXXXXXXXXX"
+          compressionCodec: "snappy"
+          layout:
+            "env": "XXXXXXXXXXXXXXX"
+            "iDc": "XXXXXXXXXXXXX"
+            "city": "XXXXXXXXXXXX"
+            "cluster": "XXXXXXXXXXXXXX"
+            "reserved1": ""
+            "reserved2": ""
+            "reserved3": ""
+            "reserved4": ""
+            "apiVersion": "{{ .APIVersion }}"
+            "kind": "{{ .Kind }}"
+            "metadata_name": "{{ .Name }}"
+            "metadata_namespace": "{{ .Namespace }}"
+            "metadata_uid": "{{ .UID }}"
+            "involvedObject_kind": "{{ .InvolvedObject.Kind }}"
+            "involvedObject_name": "{{ .InvolvedObject.Name }}"
+            "involvedObject_namespace": "{{ .InvolvedObject.Namespace }}"
+            "involvedObject_uid": "{{ .InvolvedObject.UID }}"
+            "involvedObject_apiVersion": "{{ .InvolvedObject.APIVersion }}"
+            "reason": "{{ .Reason }}"
+            "message": "{{ .Message }}"
+            "source_component": "{{ .Source.Component }}"
+            "source_host": "{{ .Source.Host }}"
+            "firstTimestamp": "{{ dateInZone \"2006-01-02 15:04:05\" .FirstTimestamp.Time \"Asia/Shanghai\" }}"
+            "lastTimestamp": "{{ dateInZone \"2006-01-02 15:04:05\" .LastTimestamp.Time \"Asia/Shanghai\" }}"
+            "count": "{{ .Count }}"
+            "type": "{{ .Type }}"
+            "eventTime": "{{ dateInZone \"2006-01-02 15:04:05\" .GetTimestampCK \"Asia/Shanghai\" }}"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: ops
+  name: event-exporter
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: event-exporter
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: event-exporter
+subjects:
+  - kind: ServiceAccount
+    namespace: ops
+    name: event-exporter
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: event-exporter
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["*"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-exporter
+  namespace: ops
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: event-exporter
+        version: v1
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '2112'
+        prometheus.io/path: '/metrics'
+    spec:
+      serviceAccountName: event-exporter
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: event-exporter
+          image: hello1992/kubernetes-event-exporter:v2
+          imagePullPolicy: IfNotPresent
+          args:
+            - -conf=/data/config.yaml
+          volumeMounts:
+            - mountPath: /data
+              name: cfg
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+      volumes:
+        - name: cfg
+          configMap:
+            name: event-exporter-cfg
+  selector:
+    matchLabels:
+      app: event-exporter
+      version: v1

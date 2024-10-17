@@ -1,0 +1,2650 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Kubernetes Events",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": 18696,
+  "graphTooltip": 0,
+  "id": 135,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 39,
+      "panels": [],
+      "title": "重要事件",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 0,
+        "y": 1
+      },
+      "id": 47,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND\r\nreason='ConntrackFull'\r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1729062524) AND eventTime <= toDateTime(1729062824)\r\nAND\r\nreason='ConntrackFull')\r\n AND cluster IN ('pre-cluster') \r\n \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "ConntrackFull",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 1
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND\r\nmatch(reason, 'SystemOOM')\r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1729061354) AND eventTime <= toDateTime(1729062254)\r\nAND\r\nmatch(reason, 'SystemOOM')\r\nAND\r\nmatch(cluster, 'pre-cluster,k8s-yunying')\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "SystemOOM",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 4,
+        "y": 1
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND\r\nreason='Rebooted' \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1729062538) AND eventTime <= toDateTime(1729062838)\r\nAND\r\nreason='Rebooted'\r\n AND cluster IN ('pre-cluster') \r\n \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Rebooted",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 1
+      },
+      "id": 50,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND \r\nreason IN ('NodeHasSufficientDisk',\r\n'NodeReady',\r\n'NodeNotReady',\r\n'NodeHasSufficientPID',\r\n'NodeHasNoDiskPressure',\r\n'NodeAllocatableEnforced')\r\n\r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 300) * 300) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1728877498) AND eventTime <= toDateTime(1729223098) AND reason != 'OOMKilling'\r\nAND \r\nreason IN ('NodeHasSufficientDisk',\r\n'NodeReady',\r\n'NodeNotReady',\r\n'NodeHasSufficientPID',\r\n'NodeHasNoDiskPressure',\r\n'NodeAllocatableEnforced')\r\n\r\n \r\n \r\n AND type IN ('Normal','Warning') \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "showFormattedSQL": true,
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Node*-节点不稳定",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 1
+      },
+      "id": 43,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND\r\nreason IN ('BackOff','CrashLoopBackOff') \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 120) * 120) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1728963789) AND eventTime <= toDateTime(1729136589) AND reason != 'OOMKilling'\r\nAND\r\nreason IN ('BackOff','CrashLoopBackOff')\r\n \r\n \r\n AND type IN ('Normal','Warning') \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "BackOff-容器Crash",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 1
+      },
+      "id": 46,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND\r\nreason='FailedScheduling' \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1729062596) AND eventTime <= toDateTime(1729062896)\r\nAND\r\nmreason='FailedScheduling' \r\n AND cluster IN ('pre-cluster') \r\n \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "FailedScheduling-调度失败",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 15,
+        "y": 1
+      },
+      "id": 44,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND \r\nreason='FailedMount' \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1729062582) AND eventTime <= toDateTime(1729062882)\r\nAND \r\nreason'FailedMount' \r\n AND cluster IN ('pre-cluster') \r\n \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "FailedMount-卷挂载失败",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "id": 45,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND\r\nreason IN ('TaintManagerEviction', 'Evictied') \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 120) * 120) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1728963749) AND eventTime <= toDateTime(1729136549) AND reason != 'OOMKilling'\r\nAND\r\nreason IN ('TaintManagerEviction', 'Evictie') \r\n \r\n \r\n AND type IN ('Normal','Warning') \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Evictied-驱逐",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 1
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, count() FROM $table WHERE \r\n$timeFilter AND $filter\r\nAND\r\nreason='Failed' \r\nAND\r\nmatch(message, '.*ImagePullBackOff.*')\r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n GROUP BY t ORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE \r\neventTime >= toDateTime(1729062608) AND eventTime <= toDateTime(1729062908)\r\nAND\r\nreason'Failed' \r\nAND\r\nmatch(message, '.*ImagePullBackOff.*')\r\n AND cluster IN ('pre-cluster') \r\n \r\n \r\n \r\n \r\n \r\n \r\n\r\n GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Failed-镜像拉取失败",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "tuTYtRI4z"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 13,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "tuTYtRI4z"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "统计",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "mode": "lcd",
+              "type": "gauge"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 10
+              },
+              {
+                "color": "#EF843C",
+                "value": 30
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Field"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.width",
+                "value": 300
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-blues"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Reason"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#eab839",
+                  "mode": "continuous-RdYlGr"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-BlYlRd"
+                }
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reason"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 240
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 9,
+        "x": 0,
+        "y": 6
+      },
+      "id": 15,
+      "interval": "1m",
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total"
+          }
+        ]
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    $timeSeries as t,\r\n    reason,\r\n    count()\r\nFROM $table\r\nWHERE\r\n    $timeFilter AND $filter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\nGROUP BY\r\n t,\r\n reason",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    (intDiv(toUInt32(eventTime), 60) * 60) * 1000 as t,\r\n    reason,\r\n    count()\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1728978170) AND eventTime <= toDateTime(1729064570)\r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\nGROUP BY\r\n t,\r\n reason",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Kubernetes Events",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 9,
+        "y": 6
+      },
+      "id": 36,
+      "interval": "1m",
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "7.4.0-beta1",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    count() as none,\r\n    `reason` as kind\r\nFROM $table\r\nWHERE\r\n    $timeFilter AND $filter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n none",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    count() as none,\r\n    `reason` as kind\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1728978109) AND eventTime <= toDateTime(1729064509)\r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n none",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "reason",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 14,
+        "y": 6
+      },
+      "id": 34,
+      "interval": "1m",
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "7.4.0-beta1",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    count() as c,\r\n    `involvedObject_kind` as kind\r\nFROM $table\r\nWHERE\r\n    $timeFilter AND $filter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n\r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n c",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    count() as c,\r\n    `involvedObject_kind` as kind\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1728978098) AND eventTime <= toDateTime(1729064498)\r\n     \r\n     \r\n     \r\n     \r\n     AND source_host IN ('10.11.154.243') \r\n     \r\n     \r\n     \r\n\r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n c",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "kind",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Warning"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 19,
+        "y": 6
+      },
+      "id": 28,
+      "interval": "1m",
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "7.4.0-beta1",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    count() as c,\r\n    `type` as kind\r\nFROM $table\r\nWHERE\r\n    $timeFilter AND $filter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n c",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    count() as c,\r\n    `type` as kind\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1728978070) AND eventTime <= toDateTime(1729064470)\r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n c",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "type",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 9,
+        "y": 14
+      },
+      "id": 33,
+      "interval": "1m",
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "7.4.0-beta1",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    count() as none,\r\n    `involvedObject_namespace` as kind\r\nFROM $table\r\nWHERE\r\n    $timeFilter AND $filter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n none",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    count() as none,\r\n    `involvedObject_namespace` as kind\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1728978092) AND eventTime <= toDateTime(1729064492)\r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n none",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "namespace",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 14,
+        "y": 14
+      },
+      "id": 32,
+      "interval": "1m",
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "7.4.0-beta1",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    count() as c,\r\n    `source_component` as kind\r\nFROM $table\r\nWHERE\r\n    $timeFilter AND $filter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n c",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    count() as c,\r\n    `source_component` as kind\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1728978084) AND eventTime <= toDateTime(1729064484)\r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\n     \r\nGROUP BY\r\n kind\r\nORDER BY\r\n c",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "component",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "none"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 19,
+        "y": 14
+      },
+      "id": 35,
+      "interval": "1m",
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "7.4.0-beta1",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    count() as none,\r\n    `source_host` as kind\r\nFROM $table\r\nWHERE\r\n    $timeFilter AND $filter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\n\r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n none",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    count() as none,\r\n    `source_host` as kind\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1728978117) AND eventTime <= toDateTime(1729064517)\r\n     \r\n     \r\n     \r\n     \r\n     AND source_host IN ('10.11.154.243') \r\n     \r\n     \r\n     \r\n\r\nGROUP BY\r\n kind\r\nORDER BY\r\n none",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "host",
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "tuTYtRI4z"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 31,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "tuTYtRI4z"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "时间线",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Warning"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Normal"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "id": 37,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT \r\n$timeSeries as t, \r\n`type`as k, \r\ncount() \r\nFROM \r\n$table \r\nWHERE \r\n$timeFilter AND $filter \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\nGROUP BY \r\nt,k \r\nORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT \r\n(intDiv(toUInt32(eventTime), 30) * 30) * 1000 as t, \r\n`type`as k, \r\ncount() \r\nFROM \r\nk8s_db.t_kubernetes_events_info \r\nWHERE \r\neventTime >= toDateTime(1729059426) AND eventTime <= toDateTime(1729122798) AND reason != 'OOMKilling' \r\n \r\n AND involvedObject_kind IN ('ETCDSnapshotFile') \r\n\r\n \r\n \r\n \r\n \r\n \r\nGROUP BY \r\nt,k \r\nORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "ALL",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-red",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "all_warnings"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "all_warnings"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT \r\n$timeSeries as t, \r\ncount() as all_warnings\r\nFROM \r\n$table\r\nWHERE \r\n$timeFilter AND $filter \r\nAND\r\ntype='Warning'\r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\nGROUP BY \r\nt\r\nORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT \r\n(intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, \r\ncount() as all_warning\r\nFROM \r\nk8s_db.t_kubernetes_events_info\r\nWHERE \r\neventTime >= toDateTime(1729064288) AND eventTime <= toDateTime(1729066088) \r\nAND\r\ntype='Warning'\r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\nGROUP BY \r\nt\r\nORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "showFormattedSQL": false,
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        },
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT \r\n$timeSeries as t,\r\nreason,\r\ncount()\r\nFROM \r\n$table\r\nWHERE \r\n$timeFilter AND $filter \r\nAND\r\ntype='Warning'\r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\nGROUP BY \r\nt, reason\r\nORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT (intDiv(toUInt32(eventTime), 1) * 1) * 1000 as t, count() FROM k8s_db.t_kubernetes_events_info WHERE eventTime >= toDateTime(1729064143) AND eventTime <= toDateTime(1729065943) GROUP BY t ORDER BY t",
+          "refId": "B",
+          "round": "0s",
+          "showFormattedSQL": true,
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Warnings",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Warning"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Normal"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "id": 49,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT \r\n$timeSeries as t, \r\nreason,\r\ncount() \r\nFROM \r\n$table \r\nWHERE \r\n$timeFilter AND $filter \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\nGROUP BY \r\nt,reason \r\nORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT \r\n(intDiv(toUInt32(eventTime), 30) * 30) * 1000 as t, \r\nreason,\r\ncount() \r\nFROM \r\nk8s_db.t_kubernetes_events_info \r\nWHERE \r\neventTime >= toDateTime(1729059426) AND eventTime <= toDateTime(1729122798) AND reason != 'OOMKilling' \r\n \r\n AND involvedObject_kind IN ('ETCDSnapshotFile') \r\n\r\n \r\n \r\n \r\n \r\n \r\nGROUP BY \r\nt,reason \r\nORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Reason",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Warning"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Normal"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "id": 48,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT \r\n$timeSeries as t, \r\ncluster,\r\ncount() \r\nFROM \r\n$table \r\nWHERE \r\n$timeFilter AND $filter \r\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n$conditionalTest(AND type IN (${type:singlequote}), $type)\r\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n$conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n$conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\nGROUP BY \r\nt,cluster\r\nORDER BY t",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT \r\n(intDiv(toUInt32(eventTime), 30) * 30) * 1000 as t, \r\ncluster,\r\ncount() \r\nFROM \r\nk8s_db.t_kubernetes_events_info \r\nWHERE \r\neventTime >= toDateTime(1729059426) AND eventTime <= toDateTime(1729122798) AND reason != 'OOMKilling' \r\n \r\n AND involvedObject_kind IN ('ETCDSnapshotFile') \r\n\r\n \r\n \r\n \r\n \r\n \r\nGROUP BY \r\nt,cluster\r\nORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "title": "Cluster Events",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "tuTYtRI4z"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 41
+      },
+      "id": 4,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "tuTYtRI4z"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "事件",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "ae0booun8eznkf"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "json-view"
+            },
+            "filterable": true,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 159
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cluster"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 125
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "component"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 89
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kind"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 66
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ns"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 143
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "message"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 833
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reason"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 99
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "host"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 107
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 72
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "md",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "add_metadata": true,
+          "database": "k8s_db",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "ae0booun8eznkf"
+          },
+          "dateTimeColDataType": "eventTime",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter AND $filter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\r\n    eventTime as time,\r\n    cluster,\r\n    source_component as component,\r\n    source_host as host,\r\n    involvedObject_kind as kind,\r\n    involvedObject_namespace as ns,\r\n    involvedObject_name as name,\r\n    type,\r\n    reason,\r\n    message,\r\n    `count`\r\nFROM $table\r\nWHERE\r\n    $timeFilter\r\n    $conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\r\n    $conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\r\n    $conditionalTest(AND type IN (${type:singlequote}), $type)\r\n    $conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\r\n    $conditionalTest(AND source_host IN (${host:singlequote}), $host)\r\n    $conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\r\n    $conditionalTest(AND reason IN (${reason:singlequote}), $reason)\r\n    $conditionalTest(AND (match(involvedObject_name, '.*${search:raw}.*') OR match(message, '.*${search:raw}.*')), $search)\r\nORDER BY\r\n    time DESC",
+          "rawQuery": "/* grafana dashboard=kubernetes events, user=1 */\nSELECT\r\n    eventTime as time,\r\n    cluster,\r\n    source_component as component,\r\n    source_host as host,\r\n    involvedObject_kind as kind,\r\n    involvedObject_namespace as ns,\r\n    involvedObject_name as name,\r\n    type,\r\n    reason,\r\n    message,\r\n    `count`\r\nFROM k8s_db.t_kubernetes_events_info\r\nWHERE\r\n    eventTime >= toDateTime(1729131655) AND eventTime <= toDateTime(1729135255) \r\n     \r\n     \r\n     AND type IN ('Warning') \r\n     \r\n     \r\n     \r\n     \r\n     \r\nORDER BY\r\n    time DESC",
+          "refId": "A",
+          "round": "0s",
+          "showFormattedSQL": true,
+          "showHelp": true,
+          "skip_comments": true,
+          "table": "t_kubernetes_events_info"
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "revision": 1,
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "reason != 'OOMKilling'",
+          "value": "reason != 'OOMKilling'"
+        },
+        "description": "全局过滤器:\n1. SystemOOM和OOMKilling是重复的, 去除\n\n\n",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "filter",
+        "options": [
+          {
+            "selected": true,
+            "text": "reason != 'OOMKilling'",
+            "value": "reason != 'OOMKilling'"
+          }
+        ],
+        "query": "reason != 'OOMKilling'",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "ae0booun8eznkf"
+        },
+        "definition": "SELECT DISTINCT cluster FROM k8s_db.t_kubernetes_events_info WHERE  cluster != '' AND $filter",
+        "hide": 0,
+        "includeAll": true,
+        "label": "集群",
+        "multi": true,
+        "name": "cluster_name",
+        "options": [],
+        "query": "SELECT DISTINCT cluster FROM k8s_db.t_kubernetes_events_info WHERE  cluster != '' AND $filter",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "ae0booun8eznkf"
+        },
+        "definition": "SELECT DISTINCT involvedObject_kind FROM k8s_db.t_kubernetes_events_info WHERE  \n1=1 AND $filter \n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name) \nlimit 1000",
+        "hide": 0,
+        "includeAll": true,
+        "label": "kind",
+        "multi": true,
+        "name": "kind",
+        "options": [],
+        "query": "SELECT DISTINCT involvedObject_kind FROM k8s_db.t_kubernetes_events_info WHERE  \n1=1 AND $filter \n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name) \nlimit 1000",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "type",
+        "multi": true,
+        "name": "type",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Normal",
+            "value": "Normal"
+          },
+          {
+            "selected": false,
+            "text": "Warning",
+            "value": "Warning"
+          }
+        ],
+        "query": "Normal, Warning",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "ae0booun8eznkf"
+        },
+        "definition": "SELECT DISTINCT involvedObject_namespace FROM k8s_db.t_kubernetes_events_info WHERE  1=1 AND $filter \n\n\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\nlimit 1000\n",
+        "hide": 0,
+        "includeAll": true,
+        "label": "namespace",
+        "multi": true,
+        "name": "namespace",
+        "options": [],
+        "query": "SELECT DISTINCT involvedObject_namespace FROM k8s_db.t_kubernetes_events_info WHERE  1=1 AND $filter \n\n\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\nlimit 1000\n",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "ae0booun8eznkf"
+        },
+        "definition": "SELECT DISTINCT source_host FROM k8s_db.t_kubernetes_events_info WHERE  \n1=1 AND $filter \n\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\nlimit 1000\n",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "host",
+        "options": [],
+        "query": "SELECT DISTINCT source_host FROM k8s_db.t_kubernetes_events_info WHERE  \n1=1 AND $filter \n\n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\nlimit 1000\n",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "ae0booun8eznkf"
+        },
+        "definition": "SELECT DISTINCT involvedObject_name FROM k8s_db.t_kubernetes_events_info WHERE  1=1\n AND $filter \n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\nlimit 1000\n",
+        "hide": 0,
+        "includeAll": true,
+        "label": "",
+        "multi": true,
+        "name": "name",
+        "options": [],
+        "query": "SELECT DISTINCT involvedObject_name FROM k8s_db.t_kubernetes_events_info WHERE  1=1\n AND $filter \n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\nlimit 1000\n",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "ae0booun8eznkf"
+        },
+        "definition": "SELECT DISTINCT reason FROM k8s_db.t_kubernetes_events_info WHERE  1=1\n AND $filter \n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\nlimit 10000",
+        "hide": 0,
+        "includeAll": true,
+        "label": "reason",
+        "multi": true,
+        "name": "reason",
+        "options": [],
+        "query": "SELECT DISTINCT reason FROM k8s_db.t_kubernetes_events_info WHERE  1=1\n AND $filter \n$conditionalTest(AND cluster IN (${cluster_name:singlequote}), $cluster_name)\n$conditionalTest(AND involvedObject_kind IN (${kind:singlequote}), $kind)\n$conditionalTest(AND type IN (${type:singlequote}), $type)\n$conditionalTest(AND involvedObject_namespace IN (${namespace:singlequote}), $namespace)\n$conditionalTest(AND source_host IN (${host:singlequote}), $host)\n$conditionalTest(AND involvedObject_name IN (${name:singlequote}), $name)\nlimit 10000",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "label": "搜索(name/message)",
+        "name": "search",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "kubernetes events",
+  "uid": "FFacG7uSk12",
+  "version": 138,
+  "weekStart": ""
+}
